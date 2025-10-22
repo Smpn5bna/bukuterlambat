@@ -1,0 +1,32 @@
+:root{--theme:#0ea5e9;--deep:#0369a1;--bg:#f1f8ff}
+*{box-sizing:border-box}
+body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;margin:0;background:var(--bg);color:#0f172a}
+.container{max-width:1100px;margin:0 auto;padding:18px}
+.site-header{background:linear-gradient(90deg,var(--theme),var(--deep));color:#fff;padding:18px 0}
+.brand h1{margin:0;font-size:1.4rem}
+.subtitle{opacity:0.95;font-size:0.9rem}
+.main-grid{display:grid;grid-template-columns:1fr 420px;gap:20px;padding:20px 0}
+.card{background:#fff;padding:18px;border-radius:12px;box-shadow:0 8px 30px rgba(2,6,23,0.06)}
+.wide-card{grid-column:1/-1}
+.row{display:flex;gap:8px;margin-top:8px}
+.btn{background:var(--theme);color:#fff;padding:8px 12px;border-radius:8px;border:none;cursor:pointer;font-weight:600}
+.btn.ghost{background:transparent;color:var(--deep);border:1px solid #e6eef6}
+.btn.small{padding:6px 8px;font-size:13px}
+.btn.green{background:#16a34a}
+.form-row{margin-bottom:10px}
+.form-row-inline{display:flex;gap:12px}
+input,select,textarea{padding:8px;border-radius:8px;border:1px solid #e6eef6;background:#fbfdff;width:100%}
+textarea{min-height:100px}
+.summary{background:#f8fbff;padding:10px;border-left:4px solid var(--theme);border-radius:6px;margin-top:10px}
+.class-list{margin-top:12px;max-height:220px;overflow:auto}
+.student-item{display:flex;justify-content:space-between;align-items:center;padding:8px;background:#f1fbff;margin-bottom:6px;border-radius:8px}
+.student-item button{background:#ef4444;padding:6px 8px;border-radius:6px;border:none;color:#fff}
+.table-wrap{overflow:auto;margin-top:10px}
+.table{width:100%;border-collapse:collapse}
+.table th,.table td{padding:10px;border-bottom:1px solid #eef3f8;text-align:left}
+.stats-grid{display:flex;gap:12px;flex-wrap:wrap}
+.stat-card{flex:1;min-width:260px;padding:10px;background:#fff;border-radius:8px}
+.site-footer{background:var(--deep);color:#fff;padding:12px;margin-top:18px;text-align:center}
+.toast{position:fixed;right:20px;bottom:20px;background:var(--deep);color:#fff;padding:8px 12px;border-radius:8px}
+.hidden{display:none}
+@media(max-width:1000px){.main-grid{grid-template-columns:1fr}.class-list{max-height:180px}}
