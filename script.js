@@ -129,3 +129,4 @@ document.getElementById("downloadRekapBtn").onclick = () => {
 
 // Jalankan saat halaman dibuka
 loadData();
+
