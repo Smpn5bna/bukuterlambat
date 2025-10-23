@@ -1,65 +1,72 @@
 <!doctype html>
 <html lang="id">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>SMP Negeri 5 Banda Aceh - Aplikasi Keterlambatan Siswa</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Aplikasi Keterlambatan Siswa — SMP Negeri 5 Banda Aceh</title>
   <link rel="stylesheet" href="style.css">
+  <!-- libs for charts & pdf -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
-  <header class="site-header">
+  <header class="topbar">
     <div class="container">
-      <div class="brand">
-        <h1>SMP Negeri 5 Banda Aceh</h1>
-        <div class="subtitle">Aplikasi Keterlambatan Siswa (v8.3)</div>
-      </div>
+      <h1>Aplikasi Keterlambatan Siswa</h1>
+      <div class="subtitle">SMP Negeri 5 Banda Aceh</div>
     </div>
   </header>
 
-  <main class="container main-grid">
+  <main class="container">
     <section class="card">
-      <h2>Data Siswa - Import / Kelola</h2>
-      <p>Format file: kolom pertama = <strong>Nama</strong>, kolom kedua = <strong>Kelas</strong> (CSV/Excel)</p>
-      <input id="fileInput" type="file" accept=".csv,.xlsx,.xls" />
+      <h2>Import Data Siswa (CSV / Excel sederhana)</h2>
       <div class="row">
-        <button id="importBtn" class="btn">Import Siswa</button>
+        <input id="fileInput" type="file" accept=".csv,.txt" />
+        <button id="importBtn" class="btn primary">Import Siswa</button>
         <button id="clearStudents" class="btn ghost">Hapus Semua Siswa</button>
       </div>
-      <div class="manage-controls">
+
+      <div class="manage">
         <input id="newName" placeholder="Nama siswa baru..." />
         <input id="newClass" placeholder="Kelas..." />
         <button id="addStudent" class="btn small">Tambah Siswa</button>
       </div>
+
       <div id="classSummary" class="summary"></div>
       <div id="studentList" class="class-list"></div>
     </section>
 
     <section class="card">
       <h2>Catat Keterlambatan</h2>
-      <div class="form-row">
-        <label>Pilih Kelas</label>
-        <select id="selectClass"><option value="">-- Pilih Kelas --</option></select>
+      <label>Pilih Kelas</label>
+      <select id="selectClass"><option value="">-- Pilih Kelas --</option></select>
+
+      <label>Nama</label>
+      <select id="selectStudent"><option value="">-- Pilih Siswa --</option></select>
+
+      <div class="row-inline">
+        <div>
+          <label>Tanggal (otomatis)</label>
+          <input id="tanggal" type="date" readonly />
+        </div>
+        <div>
+          <label>Jam (otomatis)</label>
+          <input id="jam" type="time" readonly />
+        </div>
       </div>
-      <div class="form-row">
-        <label>Pilih Siswa</label>
-        <select id="selectStudent"><option value="">-- Pilih Siswa --</option></select>
-      </div>
-      <div class="form-row-inline">
-        <div><label>Tanggal (otomatis)</label><input id="tanggal" type="date" readonly /></div>
-        <div><label>Jam (otomatis)</label><input id="jam" type="time" readonly /></div>
-      </div>
-      <div class="form-row"><label>Alasan</label><input id="reason" placeholder="Alasan keterlambatan..." /></div>
+
+      <label>Alasan</label>
+      <input id="reason" placeholder="Alasan keterlambatan..." />
+
       <div class="row">
-        <button id="saveBtn" class="btn">Simpan</button>
-        <button id="exportMonthlyCsv" class="btn green">Download Rekap Bulanan (CSV)</button>
+        <button id="saveBtn" class="btn primary">Simpan</button>
+        <button id="exportMonthlyCsv" class="btn success">Download Rekap Bulanan (CSV)</button>
         <button id="downloadPdf" class="btn">Download PDF Ringkasan</button>
       </div>
 
-      <hr/>
+      <hr />
+
       <h3>Daftar Keterlambatan</h3>
       <div class="filters">
         <input id="searchQ" placeholder="Cari nama atau alasan..." />
@@ -70,25 +77,26 @@
         <button id="resetFilter" class="btn ghost small">Reset</button>
         <button id="exportCsv" class="btn small">Export CSV</button>
       </div>
+
       <div id="latenessTable" class="table-wrap"></div>
     </section>
 
-    <section class="card wide-card">
+    <section class="card wide">
       <h2>Statistik</h2>
-      <div class="stats-grid">
+      <div class="stats">
         <div class="stat-card">
           <h4>Persentase Keterlambatan per Kelas</h4>
           <canvas id="pieChart"></canvas>
         </div>
         <div class="stat-card">
-          <h4>Keterlambatan per Bulan</h4>
+          <h4>Keterlambatan per Bulan (Jumlah)</h4>
           <canvas id="barChart"></canvas>
         </div>
       </div>
     </section>
   </main>
 
-  <footer class="site-footer">
+  <footer class="footer">
     <div class="container">
       <div>© <span id="year"></span> SMP Negeri 5 Banda Aceh</div>
       <div>Dikembangkan oleh <strong>Arisalwin, S.Pd</strong></div>
