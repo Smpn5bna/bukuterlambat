@@ -16,17 +16,17 @@ async function loadFromServer(){
   try{
     const res = await fetch(sheetURL);
     const data = await res.json();
+    // map server shape to local
     students = (data.siswa||[]).map((s,i)=>({ id: Date.now()+i, name: s.nama, klass: s.kelas }));
     lateness = (data.keterlambatan||[]).map((r,i)=>({ id: Date.now()+i, name: r.nama, klass: r.kelas, date: r.tanggal, time: r.jam, reason: r.alasan||'' }));
     renderAll();
     toast('Data server dimuat');
   }catch(e){
     console.warn('Load failed', e);
-    // fallback to localStorage
     students = JSON.parse(localStorage.getItem('lts_students')||'[]');
     lateness = JSON.parse(localStorage.getItem('lts_lateness')||'[]');
     renderAll();
-    toast('Gunakan mode lokal (offline)');
+    toast('Mode offline (data lokal)');
   }
 }
 
@@ -50,10 +50,9 @@ el('importBtn').addEventListener('click', ()=>{
   const reader = new FileReader();
   reader.onload = (ev)=>{
     const text = ev.target.result;
-    // split lines, support separators comma/semicolon/tab. Allow names with spaces.
     const lines = text.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
     lines.forEach(line=>{
-      // try CSV with two columns; last column treated as class
+      // split by comma/semicolon/tab — last column is class, rest join as name (keamanan spasi)
       const parts = line.split(/[,;|\t]/).map(p=>p.trim()).filter(Boolean);
       if(parts.length>=2){
         const klass = parts.pop();
@@ -61,13 +60,11 @@ el('importBtn').addEventListener('click', ()=>{
         students.push({ id: Date.now()+Math.random(), name, klass });
       }
     });
-    // push to server (replace full list)
     postToServer({ type:'uploadSiswa', siswa: students.map(s=>({ nama:s.name, kelas:s.klass })) });
     renderAll();
     el('fileInput').value='';
     toast('Import selesai');
   };
-  // read as text (works for CSV/TXT)
   reader.readAsText(f,'UTF-8');
 });
 
@@ -125,7 +122,6 @@ el('saveBtn').addEventListener('click', async ()=>{
   const s = students.find(x=>String(x.id)===String(sid)); if(!s) return alert('Siswa tidak ditemukan');
   const date = el('tanggal').value; const time = el('jam').value; const reason = el('reason').value||'';
   const rec = { id: Date.now()+Math.random(), name:s.name, klass:s.klass, date, time, reason };
-  // push locally and try send to server
   lateness.unshift(rec);
   postToServer({ type:'tambahTerlambat', nama: s.name, kelas: s.klass, tanggal: date, jam: time, alasan: reason, guru: '' });
   renderLatenessTable(); updateCharts(); toast('Keterlambatan dicatat');
@@ -156,7 +152,7 @@ el('resetFilter').addEventListener('click', ()=>{ el('searchQ').value=''; el('fi
 el('exportCsv').addEventListener('click', ()=>{
   if(!lateness.length) return toast('Belum ada data');
   const rows = [['Nama','Kelas','Tanggal','Jam','Alasan']].concat(lateness.map(r=>[r.name,r.klass,r.date,r.time,r.reason||'']));
-  const csv = rows.map(r=> r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const csv = rows.map(r=> r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')).join('\\n');
   const blob = new Blob([csv],{type:'text/csv'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='keterlambatan.csv'; a.click(); URL.revokeObjectURL(a.href); toast('CSV diekspor');
 });
 
@@ -164,7 +160,7 @@ el('exportMonthlyCsv').addEventListener('click', ()=>{
   if(!lateness.length) return toast('Belum ada data');
   const byMonth = {}; lateness.forEach(r=>{ const m = r.date.slice(0,7); byMonth[m]=(byMonth[m]||0)+1; });
   const rows = [['Bulan','Jumlah']].concat(Object.entries(byMonth).sort());
-  const csv = rows.map(r=> r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const csv = rows.map(r=> r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')).join('\\n');
   const blob = new Blob([csv],{type:'text/csv'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='rekap_bulanan.csv'; a.click(); URL.revokeObjectURL(a.href); toast('Rekap bulanan diunduh');
 });
 
@@ -207,4 +203,3 @@ function randColor(){ const r=Math.floor(Math.random()*200)+30; const g=Math.flo
 // ====== init ======
 function init(){ renderAll(); loadFromServer(); }
 init();
-

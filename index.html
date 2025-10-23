@@ -3,9 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Aplikasi Keterlambatan Siswa — SMP Negeri 5 Banda Aceh</title>
-  <link rel="stylesheet" href="style.css">
-  <!-- libs for charts & pdf -->
+  <title>Aplikasi Keterlambatan Siswa - SMP Negeri 5 Banda Aceh</title>
+  <link rel="stylesheet" href="style.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -13,14 +12,18 @@
 <body>
   <header class="topbar">
     <div class="container">
-      <h1>Aplikasi Keterlambatan Siswa</h1>
-      <div class="subtitle">SMP Negeri 5 Banda Aceh</div>
+      <div class="brand">
+        <h1>Aplikasi Keterlambatan Siswa</h1>
+        <div class="subtitle">SMP Negeri 5 Banda Aceh</div>
+      </div>
     </div>
   </header>
 
   <main class="container">
+    <!-- Upload Siswa -->
     <section class="card">
-      <h2>Import Data Siswa (CSV / Excel sederhana)</h2>
+      <h2>Import Data Siswa (CSV / TXT sederhana)</h2>
+      <p class="muted">Format tiap baris: <code>Nama Siswa, Kelas</code> — Nama boleh pakai spasi.</p>
       <div class="row">
         <input id="fileInput" type="file" accept=".csv,.txt" />
         <button id="importBtn" class="btn primary">Import Siswa</button>
@@ -37,12 +40,14 @@
       <div id="studentList" class="class-list"></div>
     </section>
 
+    <!-- Form Keterlambatan -->
     <section class="card">
       <h2>Catat Keterlambatan</h2>
+
       <label>Pilih Kelas</label>
       <select id="selectClass"><option value="">-- Pilih Kelas --</option></select>
 
-      <label>Nama</label>
+      <label>Nama Siswa</label>
       <select id="selectStudent"><option value="">-- Pilih Siswa --</option></select>
 
       <div class="row-inline">
@@ -81,6 +86,7 @@
       <div id="latenessTable" class="table-wrap"></div>
     </section>
 
+    <!-- Statistik -->
     <section class="card wide">
       <h2>Statistik</h2>
       <div class="stats">
